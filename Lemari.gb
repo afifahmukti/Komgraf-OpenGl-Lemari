@@ -1,0 +1,116 @@
+Dim sudutx#, suduty#
+Dim kecepatan#=0.1
+Dim texture(1)
+texture(0) = loadtexture("texture/lemari.jpg")
+texture(1) = loadtexture("texture/lemari2.jpg")
+
+glenable(gl_texture_2d)
+
+'titik kamera (0,0,0)
+Dim kamx# = 0
+Dim kamy# = 0
+Dim kamz# = 0
+'titik pandang (0,0,0)
+Dim pandangx# = 0
+Dim pandangy# = 0
+Dim pandangz# = -1
+                           
+'gltranslatef(0,0,-5)  
+'glRotatef(60,1,1,0);.
+
+while true
+
+glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT)    'membersihkan memori
+glLoadIdentity()  'mengembalikan matriks
+
+'(kamera,pandang,Vlookup(ybantu))
+gluLookAt(kamx#,kamy#,kamz#,pandangx#,pandangy#,pandangz#,0,1,0)
+gltranslatef(0,0,-5)     'memindah lemari di depan mata z = -5
+glRotatef(suduty#,0,1,0) 'memutar di sumbu y
+glRotatef(sudutx#,1,0,0) 'memutar di sumbu x
+
+glBindTexture(GL_TEXTURE_2D, texture(1))  
+glBegin(gl_quads)     'belakang 
+    glTexCoord2f(0.0, 0.0)  'posisi textur kiri bawah
+    glVertex3f(-1,-2,-1)  'kiri bawah
+    glTexCoord2f(0.0, 1.0)
+    glVertex3f(-1,2,-1)     'kiri atas
+    glTexCoord2f(1.0, 1.0)
+    glVertex3f(1,2,-1)       'kanan atas
+    glTexCoord2f(1.0, 0.0)
+    glVertex3f(1,-2,-1)       'kanan bawah
+glEnd()   
+
+glBindTexture(GL_TEXTURE_2D, texture(0))
+glBegin(gl_quads)    'depan
+    glTexCoord2f(0.0, 0.0)
+    glVertex3f(-1,-2,1)     'kiri bawah 
+    glTexCoord2f(0.0, 1.0)
+    glVertex3f(-1,2,1)      'kiri atas
+    glTexCoord2f(1.0, 1.0)
+    glVertex3f(1,2,1)       'kanan atas 
+    glTexCoord2f(1.0, 0.0)
+    glVertex3f(1,-2,1)      'kanan bawah
+glEnd()
+
+glBindTexture(GL_TEXTURE_2D, texture(1))
+glBegin(gl_quads)  'atas  
+    glTexCoord2f(0.0, 0.0)
+    glVertex3f(-1,2,1)       'kiri Depan 
+    glTexCoord2f(0.0, 1.0)
+    glVertex3f(-1,2,-1)      'kiri belakang  
+    glTexCoord2f(1.0, 1.0)
+    glVertex3f(1,2,-1)       'kanan belakang
+    glTexCoord2f(1.0, 0.0)
+    glVertex3f(1,2,1)        'kanan depan
+glEnd()
+
+glBindTexture(GL_TEXTURE_2D, texture(1))
+glBegin(gl_quads)  'bawah  
+    glTexCoord2f(0.0, 0.0)
+    glVertex3f(-1,-2,1)       'kri depan
+    glTexCoord2f(0.0, 1.0)
+    glVertex3f(-1,-2,-1)      'kiri belakang
+    glTexCoord2f(1.0, 1.0)
+    glVertex3f(1,-2,-1)       'kanan belakang
+    glTexCoord2f(1.0, 0.0)
+    glVertex3f(1,-2,1)        'kanan depan
+glEnd()
+
+glBindTexture(GL_TEXTURE_2D, texture(1))
+glBegin(gl_quads)  'kiri  
+    glTexCoord2f(0.0, 0.0)
+    glVertex3f(-1,-2,-1)       'Bawah belakang
+    glTexCoord2f(0.0, 1.0)
+    glVertex3f(-1,2,-1)        'Atas Belakang
+    glTexCoord2f(1.0, 1.0)
+    glVertex3f(-1,2,1)         'Atas depan
+    glTexCoord2f(1.0, 0.0)
+    glVertex3f(-1,-2,1)        'Bawah depan
+glEnd()         
+
+glBindTexture(GL_TEXTURE_2D, texture(1))
+glBegin(gl_quads)  'kanan  
+    glTexCoord2f(0.0, 0.0)
+    glVertex3f(1,-2,-1)         'Bawah belakang
+    glTexCoord2f(0.0, 1.0)
+    glVertex3f(1,2,-1)          'Atas belakang
+    glTexCoord2f(1.0, 1.0)
+    glVertex3f(1,2,1)           'Atas depan
+    glTexCoord2f(1.0, 0.0)
+    glVertex3f(1,-2,1)          'Bawah depan
+glEnd() 
+
+swapBuffers() 'memindah antara 2 buah memori
+
+if scankeydown(VK_RIGHT) Then
+    suduty# = suduty#+kecepatan# 
+elseif scankeydown(VK_LEFT) Then 
+    suduty# = suduty#-kecepatan#   
+elseif scankeydown(VK_UP) Then 
+    sudutx# = sudutx#-kecepatan#
+elseif scankeydown(VK_DOWN) Then 
+    sudutx# = sudutx# +kecepatan#
+endif 
+
+wend
